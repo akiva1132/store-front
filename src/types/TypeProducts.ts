@@ -18,6 +18,10 @@ type cards = {
     Views: number;
   }
 
+  type TypeProducts ={
+    data:cards[]
+  }
+
  
 
-  export default cards
+  export default TypeProducts

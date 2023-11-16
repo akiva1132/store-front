@@ -3,4 +3,8 @@ type category = {
     category_name: string;
     category_id: string;
   }[]
-export default category
+
+  type Typecategore = {
+    data: category;
+  };
+export default Typecategore

@@ -5,22 +5,16 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
+import TypeprodactsCard from "../types/TypeprodactsCard";
 
-type props = {
-  id: number;
-  img: string;
-  title: string;
-  price: number;
-};
-
-export default function CardsProdact(props: props) {
+export default function CardsProdact(props: TypeprodactsCard) {
   const navigate = useNavigate();
   return (
     <Card sx={{ maxWidth: 345, margin: "30px" }}>
       <CardMedia sx={{ height: 140 }} image={props.img} title="green iguana" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-        {props.title}
+          {props.title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           price: {props.price}

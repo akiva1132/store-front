@@ -12,6 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./signInDialog.css";
 import { AuthContext } from "../Context/AuthContext";
+import { URL } from "../config";
 
 export interface SignInDialogProps {
   open: boolean;
@@ -23,13 +24,11 @@ export interface SignInDialogProps {
 export default function SignIn(props: SignInDialogProps) {
   const { onClose, open } = props;
   const authContext = React.useContext(AuthContext);
-  const isAuthenticated = authContext?.isAuthenticated;
   const setIsAuthenticated = authContext?.setIsAuthenticated;
-
   const handleClose = () => {
     onClose("");
   };
-
+  const [massageError, setMassageError] = React.useState<string | null>(null)
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -37,7 +36,7 @@ export default function SignIn(props: SignInDialogProps) {
       email: data.get("email"),
       password: data.get("password"),
     };
-    fetch("http://127.0.0.1:3009/users/logIn", {
+    fetch(`${URL}/users/logIn`, {
       method: "POST",
       body: JSON.stringify(user),
       headers: {
@@ -55,16 +54,16 @@ export default function SignIn(props: SignInDialogProps) {
       })
       .then((data) => {
         const userObject = {
-          email: user.email,
+          email: user.email as string,
           token: data.token,
           id: data.id,
         };
         console.log(userObject);
         localStorage.setItem("user", JSON.stringify(userObject)),
-          setIsAuthenticated ? userObject : null;
+        setIsAuthenticated && setIsAuthenticated(userObject);
+        handleClose();
       })
-      .catch((error) => console.error("Error:", error));
-    handleClose();
+      .catch((error) => {console.log("Error:", error.message), setMassageError(error.message)})
   };
 
   const defaultTheme = createTheme();
@@ -119,6 +118,16 @@ export default function SignIn(props: SignInDialogProps) {
                 id="password"
                 autoComplete="current-password"
               />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="confirmPassword"
+                id="confirmPassword"
+                autoComplete="current-password"
+              />
 
               <Button
                 type="submit"
@@ -128,6 +137,7 @@ export default function SignIn(props: SignInDialogProps) {
               >
                 Sign In
               </Button>
+              {massageError && (<div>{massageError}</div>)}
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>

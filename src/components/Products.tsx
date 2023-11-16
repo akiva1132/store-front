@@ -1,24 +1,27 @@
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import CardsProdact from "./prodactsCard";
+import CardsProdact from "./SortProdactsCard";
 import Box from "@mui/material/Box";
-import data from "../types/dataCards";
 import SortLine from "./SortLine";
 import Grid from "@mui/material/Grid";
 import "./Products.css";
-import cards from "../types/typeCards";
+import TypeProducts from "../types/TypeProducts";
+import TypeProductsSort from "../types/TypeProductsSort";
+import {URL} from "../config"
+
+
 
 export default function Products() {
   const params = useParams();
-  const [dataCard, setDataCard] = useState<data | null>(null);
+  const [dataCard, setDataCard] = useState<TypeProducts | null>(null);
   const [selectedValue, setSelectedValue] = useState<number>(3000);
-  const [sortList, setSortList] = useState<cards[] | null>(null);
+  const [sortList, setSortList] = useState<TypeProductsSort[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3009/products/all/${params.name}`
+          `${URL}/products/all/${params.name}`
         );
         if (!response.ok) {
           const errorText = await response.text();
